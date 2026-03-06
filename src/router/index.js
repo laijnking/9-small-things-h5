@@ -7,6 +7,11 @@ import Learning from '@/views/Learning.vue'
 import Stats from '@/views/Stats.vue'
 import Review from '@/views/Review.vue'
 import Settings from '@/views/Settings.vue'
+import Reading from '@/views/Reading.vue'
+import Contact from '@/views/Contact.vue'
+import EarlyRise from '@/views/EarlyRise.vue'
+import Exercise from '@/views/Exercise.vue'
+import Bedtime from '@/views/Bedtime.vue'
 
 const router = createRouter({
   history: createWebHistory(),
@@ -50,6 +55,31 @@ const router = createRouter({
       path: '/settings',
       name: 'settings',
       component: Settings,
+    },
+    {
+      path: '/reading',
+      name: 'reading',
+      component: Reading,
+    },
+    {
+      path: '/contact',
+      name: 'contact',
+      component: Contact,
+    },
+    {
+      path: '/early-rise',
+      name: 'earlyRise',
+      component: EarlyRise,
+    },
+    {
+      path: '/exercise',
+      name: 'exercise',
+      component: Exercise,
+    },
+    {
+      path: '/bedtime',
+      name: 'bedtime',
+      component: Bedtime,
     },
   ],
 })

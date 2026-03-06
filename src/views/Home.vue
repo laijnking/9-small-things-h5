@@ -1,57 +1,69 @@
 <template>
-  <div class="min-h-screen bg-background">
+  <div class="page-container">
     <!-- 头部 -->
-    <header class="px-4 pt-6 pb-4 bg-surface shadow-sm">
-      <h1 class="text-xl font-semibold text-text-primary">{{ dateStr }}</h1>
-      <p class="text-sm text-text-secondary mt-1">连续坚持 {{ streak }} 天 🎉</p>
+    <header class="page-header">
+      <div class="header-content">
+        <h1 class="header-title">{{ dateStr }}</h1>
+        <p class="header-subtitle">
+          <span class="streak-badge">
+            🔥 连续坚持 {{ streak }} 天
+          </span>
+        </p>
+      </div>
     </header>
 
     <!-- 进度条 -->
-    <div class="px-4 py-4 bg-surface border-b">
-      <div class="flex justify-between items-center mb-2">
-        <span class="text-sm text-text-secondary">今日进度</span>
-        <span class="text-sm font-medium text-primary">{{ completedCount }}/{{ habits.length }}</span>
+    <section class="progress-section">
+      <div class="progress-header">
+        <span class="progress-label">今日进度</span>
+        <span class="progress-value">{{ completedCount }}/{{ habits.length }}</span>
       </div>
-      <div class="h-2 bg-gray-200 rounded-full overflow-hidden">
+      <div class="progress-bar">
         <div 
-          class="h-full bg-primary transition-all duration-500"
+          class="progress-bar-fill animated"
           :style="{ width: progressPercent + '%' }"
         ></div>
       </div>
-    </div>
+    </section>
 
     <!-- 语音输入组件 -->
-    <div class="px-4 py-6">
+    <section class="voice-section">
       <VoiceRecorder @saved="handleVoiceSaved" />
-    </div>
+    </section>
 
     <!-- 习惯列表 -->
-    <div class="px-4 pb-20 space-y-2">
-      <HabitCard
-        v-for="habit in habits"
-        :key="habit.id"
-        :habit="habit"
-        @complete="handleComplete"
-      />
-    </div>
+    <section class="habits-section">
+      <div class="section-header">
+        <h2 class="section-title">今日习惯</h2>
+        <span class="section-count">{{ completedCount }}/{{ habits.length }}</span>
+      </div>
+      <div class="habits-list">
+        <HabitCard
+          v-for="habit in habits"
+          :key="habit.id"
+          :habit="habit"
+          @complete="handleComplete"
+        />
+      </div>
+    </section>
 
     <!-- 底部导航 -->
-    <nav class="fixed bottom-0 left-0 right-0 bg-surface border-t px-4 py-2 flex justify-around safe-area-bottom">
-      <router-link to="/" class="flex flex-col items-center py-2 px-4" :class="currentRoute === '/' ? 'text-primary' : 'text-text-secondary'">
-        <span class="text-xl">🏠</span>
-        <span class="text-xs mt-1">首页</span>
+    <nav class="tab-bar">
+      <router-link to="/" class="tab-item" :class="{ active: currentRoute === '/' }">
+        <span class="tab-item-icon">🏠</span>
+        <span class="tab-item-label">首页</span>
       </router-link>
-      <router-link to="/stats" class="flex flex-col items-center py-2 px-4" :class="currentRoute === '/stats' ? 'text-primary' : 'text-text-secondary'">
-        <span class="text-xl">📊</span>
-        <span class="text-xs mt-1">统计</span>
+      <router-link to="/stats" class="tab-item" :class="{ active: currentRoute === '/stats' }">
+        <span class="tab-item-icon">📊</span>
+        <span class="tab-item-label">统计</span>
       </router-link>
-      <router-link to="/review" class="flex flex-col items-center py-2 px-4" :class="currentRoute === '/review' ? 'text-primary' : 'text-text-secondary'">
-        <span class="text-xl">📅</span>
-        <span class="text-xs mt-1">回顾</span>
+      <router-link to="/review" class="tab-item" :class="{ active: currentRoute === '/review' }">
+        <span class="tab-item-icon">📅</span>
+        <span class="tab-item-label">回顾</span>
       </router-link>
-      <router-link to="/settings" class="flex flex-col items-center py-2 px-4" :class="currentRoute === '/settings' ? 'text-primary' : 'text-text-secondary'">
-        <span class="text-xl">⚙️</span>
-        <span class="text-xs mt-1">设置</span>
+      <router-link to="/settings" class="tab-item" :class="{ active: currentRoute === '/settings' }">
+        <span class="tab-item-icon">⚙️</span>
+        <span class="tab-item-label">设置</span>
       </router-link>
     </nav>
   </div>
@@ -70,7 +82,10 @@ const currentRoute = computed(() => route.path)
 const habitsStore = useHabitsStore()
 const habits = computed(() => habitsStore.habits)
 const completedCount = computed(() => habits.value.filter(h => h.completed).length)
-const progressPercent = computed(() => (completedCount.value / habits.value.length) * 100)
+const progressPercent = computed(() => {
+  if (habits.value.length === 0) return 0
+  return (completedCount.value / habits.value.length) * 100
+})
 
 const dateStr = new Date().toLocaleDateString('zh-CN', {
   year: 'numeric',
@@ -81,7 +96,143 @@ const dateStr = new Date().toLocaleDateString('zh-CN', {
 
 const streak = ref(12)
 
+const handleVoiceSaved = (data) => {
+  // 处理语音保存逻辑
+  console.log('Voice saved:', data)
+}
+
 const handleComplete = (habitId) => {
   habitsStore.completeHabit(habitId)
 }
 </script>
+
+<style scoped>
+/* 页面容器 */
+.page-container {
+  min-height: 100vh;
+  min-height: 100dvh;
+  background-color: var(--background);
+  padding-bottom: calc(70px + var(--spacing-safe-bottom));
+}
+
+/* 头部区域 */
+.page-header {
+  background: var(--surface);
+  padding: calc(16px + var(--spacing-safe-top)) 20px 20px;
+  border-bottom: 1px solid var(--border-light);
+  box-shadow: var(--shadow-sm);
+}
+
+.header-content {
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.header-title {
+  font-size: 20px;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin: 0;
+  line-height: 1.4;
+}
+
+.header-subtitle {
+  margin-top: 8px;
+  font-size: 14px;
+  color: var(--text-secondary);
+}
+
+.streak-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 12px;
+  background: linear-gradient(135deg, var(--primary-light) 0%, rgba(255, 138, 101, 0.2) 100%);
+  color: var(--primary-dark);
+  border-radius: var(--radius-full);
+  font-weight: 600;
+  font-size: 13px;
+}
+
+/* 进度区域 */
+.progress-section {
+  background: var(--surface);
+  padding: 20px;
+  border-bottom: 1px solid var(--border-light);
+}
+
+.progress-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.progress-label {
+  font-size: 14px;
+  color: var(--text-secondary);
+  font-weight: 500;
+}
+
+.progress-value {
+  font-size: 14px;
+  color: var(--primary);
+  font-weight: 600;
+}
+
+/* 语音区域 */
+.voice-section {
+  padding: 24px 20px;
+}
+
+/* 习惯列表区域 */
+.habits-section {
+  padding: 0 20px 20px;
+}
+
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+  padding-top: 8px;
+}
+
+.section-title {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin: 0;
+}
+
+.section-count {
+  font-size: 13px;
+  color: var(--text-secondary);
+  background: var(--background-alt);
+  padding: 4px 10px;
+  border-radius: var(--radius-full);
+}
+
+.habits-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* 响应式适配 */
+@media (max-width: 375px) {
+  .header-title {
+    font-size: 18px;
+  }
+  
+  .section-title {
+    font-size: 15px;
+  }
+}
+
+/* 横屏适配 */
+@media (orientation: landscape) {
+  .page-container {
+    padding-bottom: calc(70px + var(--spacing-safe-bottom));
+  }
+}
+</style>

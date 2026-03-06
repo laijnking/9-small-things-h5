@@ -16,6 +16,7 @@ export const useHabitsStore = defineStore('habits', {
     diaries: [],
     expenses: [],
     cleanups: [],
+    earlyRiseDays: 0, // 连续早起天数
   }),
 
   getters: {
