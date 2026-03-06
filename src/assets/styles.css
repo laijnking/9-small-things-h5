@@ -1,0 +1,60 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* 自定义样式 */
+:root {
+  --primary: #FF8A65;
+  --primary-light: #FFCCBC;
+  --primary-dark: #F4511E;
+  --success: #81C784;
+  --background: #FAFAFA;
+  --surface: #FFFFFF;
+}
+
+/* 语音按钮动画 */
+@keyframes pulse-ring {
+  0% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1.6);
+    opacity: 0;
+  }
+}
+
+.recording-animation::before {
+  content: '';
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  border-radius: 9999px;
+  background-color: rgba(255, 138, 101, 0.4);
+  animation: pulse-ring 1.5s cubic-bezier(0.215, 0.61, 0.355, 1) infinite;
+}
+
+/* 进度条动画 */
+@keyframes progress-fill {
+  from {
+    width: 0;
+  }
+}
+
+.progress-fill {
+  animation: progress-fill 0.5s ease-out;
+}
+
+/* 卡片完成动画 */
+@keyframes complete-bounce {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.02);
+  }
+}
+
+.card-complete {
+  animation: complete-bounce 0.3s ease-out;
+}
