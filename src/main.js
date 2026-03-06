@@ -3,6 +3,7 @@ import { createPinia } from 'pinia'
 import App from './App.vue'
 import router from './router'
 import './assets/styles.css'
+import { useHabitsStore } from '@/stores/habits'
 
 const app = createApp(App)
 const pinia = createPinia()
@@ -15,10 +16,9 @@ app.config.errorHandler = (err, vm, info) => {
 app.use(pinia)
 app.use(router)
 
-// 挂载应用
-app.mount('#app')
-
-// 初始化 store
-import { useHabitsStore } from '@/stores/habits'
+// 初始化 store（在 pinia 注册后）
 const habitsStore = useHabitsStore()
 habitsStore.loadFromLocalStorage()
+
+// 挂载应用
+app.mount('#app')

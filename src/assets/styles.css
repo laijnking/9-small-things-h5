@@ -90,6 +90,9 @@ body {
   overscroll-behavior-y: contain;
   user-select: none;
   -webkit-user-select: none;
+  overflow-x: hidden;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
 }
 
 #app {
