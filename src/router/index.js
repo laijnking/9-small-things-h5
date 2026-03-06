@@ -1,8 +1,12 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import Home from '@/views/Home.vue'
 import Writing from '@/views/Writing.vue'
+import Organize from '@/views/Organize.vue'
+import Expense from '@/views/Expense.vue'
+import Learning from '@/views/Learning.vue'
 import Stats from '@/views/Stats.vue'
 import Review from '@/views/Review.vue'
+import Settings from '@/views/Settings.vue'
 
 const router = createRouter({
   history: createWebHistory(),
@@ -18,6 +22,21 @@ const router = createRouter({
       component: Writing,
     },
     {
+      path: '/organize',
+      name: 'organize',
+      component: Organize,
+    },
+    {
+      path: '/expense',
+      name: 'expense',
+      component: Expense,
+    },
+    {
+      path: '/learning',
+      name: 'learning',
+      component: Learning,
+    },
+    {
       path: '/stats',
       name: 'stats',
       component: Stats,
@@ -26,6 +45,11 @@ const router = createRouter({
       path: '/review',
       name: 'review',
       component: Review,
+    },
+    {
+      path: '/settings',
+      name: 'settings',
+      component: Settings,
     },
   ],
 })
